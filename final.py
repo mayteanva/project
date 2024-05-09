@@ -8,12 +8,6 @@ Original file is located at
 """
 
 
-
-import streamlit as st
-import pandas as pd
-import sqlite3
-import plotly.express as px
-
 # Custom CSS to improve the look and feel
 st.markdown("""
 <style>
