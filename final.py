@@ -108,4 +108,4 @@ if st.button('Download Coordinators Data'):
         df_coordinators.to_csv('coordinators_data.csv')
         st.success('Coordinators data downloaded successfully!')
 
-streamlit run app.py
+
