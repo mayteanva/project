@@ -9,6 +9,8 @@ Original file is located at
 
 import streamlit as st
 import sqlite3
+import pandas as pd
+import plotly.express as px
 
 # Custom CSS to improve the look and feel
 st.markdown("""
