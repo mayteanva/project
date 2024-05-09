@@ -75,7 +75,7 @@ countries = pd.read_sql(f"SELECT * FROM countries", conn)
     # Will be used to display the unique activity types to the user
 participants = pd.read_sql(f"SELECT * FROM participants", conn)
 
-    conn.close()
+conn.close()
 
 
     # Filters will appear in an expander so that it does not occupy too much space on the screen
