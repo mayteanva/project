@@ -8,6 +8,7 @@ Original file is located at
 """
 
 import streamlit as st
+import sqlite3
 
 # Custom CSS to improve the look and feel
 st.markdown("""
