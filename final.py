@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1-c3rA6vMncx0Ixb89smsFBwG7tHhVXya
 """
 
-
+import streamlit as st
 
 # Custom CSS to improve the look and feel
 st.markdown("""
