@@ -27,12 +27,22 @@ class Button:
         self.file_name = file_name
        
     def display_button(self):
-        st.download_button(label = f'Download participants data from {countries_dictionary[country]}',
+        st.download_button(label = f'Download Participants Data from {countries_dictionary[country]}',
                    file_name = f'{self.file_name}_{countries_dictionary[country]}.csv',
                    data = self.data,
                    mime = 'text/csv')
         
-        
+class Button:
+    def __init__(self, data, file_name):
+        self.data = data
+        self.file_name = file_name
+       
+    def display_button(self):
+        st.download_button(label = f'Download Coordinators Data from {countries_dictionary[country]}',
+                   file_name = f'{self.file_name}_{countries_dictionary[country]}.csv',
+                   data = self.data,
+                   mime = 'text/csv')
+
 # 1. Adding the logo of the application
 logo = Image.open('logo.png')
 
