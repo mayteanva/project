@@ -70,10 +70,10 @@ st.markdown(f"<h1 style = 'color:#307be8;'>Partner search app</h1>", unsafe_allo
 conn = sqlite3.connect('ecsel_database.db')
 
     # Will be used to generate a dictionary
-    countries = pd.read_sql(f"SELECT * FROM countries", conn)
+countries = pd.read_sql(f"SELECT * FROM countries", conn)
 
     # Will be used to display the unique activity types to the user
-    participants = pd.read_sql(f"SELECT * FROM participants", conn)
+participants = pd.read_sql(f"SELECT * FROM participants", conn)
 
     conn.close()
 
