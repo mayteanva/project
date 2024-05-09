@@ -32,16 +32,7 @@ class Button:
                    data = self.data,
                    mime = 'text/csv')
         
-class Button:
-    def __init__(self, data, file_name):
-        self.data = data
-        self.file_name = file_name
-       
-    def display_button(self):
-        st.download_button(label = f'Download Coordinators Data from {countries_dictionary[country]}',
-                   file_name = f'{self.file_name}_{countries_dictionary[country]}.csv',
-                   data = self.data,
-                   mime = 'text/csv')
+
 
 # 1. Adding the logo of the application
 logo = Image.open('logo.png')
@@ -73,10 +64,7 @@ container.markdown(
 st.markdown(f"<h1 style = 'color:#307be8;'>Partner search app</h1>", unsafe_allow_html = True)
         
 
-confidentiality_agreement = st.checkbox("I understand that the session is confidential & I am not to share data with unauthorized people")
 
-# The content will not be visible to the user unless they agree with the confidentiality agreement
-if confidentiality_agreement:
     
     # 3. Selecting the country acronym
     conn = sqlite3.connect('ecsel_database.db')
