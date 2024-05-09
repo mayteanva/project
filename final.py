@@ -67,7 +67,7 @@ st.markdown(f"<h1 style = 'color:#307be8;'>Partner search app</h1>", unsafe_allo
 
     
     # 3. Selecting the country acronym
-    conn = sqlite3.connect('ecsel_database.db')
+conn = sqlite3.connect('ecsel_database.db')
 
     # Will be used to generate a dictionary
     countries = pd.read_sql(f"SELECT * FROM countries", conn)
