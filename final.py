@@ -47,10 +47,10 @@ class Button:
 logo = Image.open('logo.png')
 
 # In order to center the logo, the following process will be applied:
-container = st.beta_container()
+container = st.container()
 
 with container:
-    col1, col2, col3 = st.beta_columns(3)
+    col1, col2, col3 = st.columns(3)
     col2.image(logo, width=250)
     col1.empty()
     col3.empty()
@@ -91,7 +91,7 @@ if confidentiality_agreement:
 
 
     # Filters will appear in an expander so that it does not occupy too much space on the screen
-    with st.beta_expander("Filters"):
+    with st.expander("Filters"):
         # The dictionary mentioned above
         countries_dictionary = countries.set_index('Country')['Acronym'].to_dict()
         # The acronyms will be shown alphabetically to the user in a drop-down menu
