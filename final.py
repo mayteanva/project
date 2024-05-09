@@ -7,107 +7,179 @@ Original file is located at
     https://colab.research.google.com/drive/1-c3rA6vMncx0Ixb89smsFBwG7tHhVXya
 """
 
-
-
-import streamlit as st
-import pandas as pd
 import sqlite3
+import pandas as pd
+import streamlit as st
 import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from PIL import Image
 
-# Custom CSS to improve the look and feel
-st.markdown("""
-<style>
-.primaryFont {
-    font-size:16px;
-    font-family: 'Helvetica';
-    color: #4a4a4a;
-}
-.big-font {
-    font-size:20px !important;
-    font-weight: bold;
-    color: #3466f6;
-}
-</style>
-""", unsafe_allow_html=True)
 
-# Country acronyms dictionary
-country_acronyms = {
-    'Belgium': 'BE', 'Bulgaria': 'BG', 'Czechia': 'CZ', 'Denmark': 'DK', 'Germany': 'DE',
-    'Estonia': 'EE', 'Ireland': 'IE', 'Greece': 'EL', 'Spain': 'ES', 'France': 'FR', 'Croatia': 'HR',
-    'Italy': 'IT', 'Cyprus': 'CY', 'Latvia': 'LV', 'Lithuania': 'LT', 'Luxembourg': 'LU',
-    'Hungary': 'HU', 'Malta': 'MT', 'Netherlands': 'NL', 'Austria': 'AT', 'Poland': 'PL',
-    'Portugal': 'PT', 'Romania': 'RO', 'Slovenia': 'SI', 'Slovakia': 'SK', 'Finland': 'FI', 'Sweden': 'SE'
-}
+# Function to be used to download the files as csv files
+def to_csv(data_frame):
+    return data_frame.to_csv().encode('utf-8')
 
-def load_data():
+# Download button class
+class Button:
+    def __init__(self, data, file_name):
+        self.data = data
+        self.file_name = file_name
+       
+    def display_button(self):
+        st.download_button(label = f'Download participants data from {countries_dictionary[country]}',
+                   file_name = f'{self.file_name}_{countries_dictionary[country]}.csv',
+                   data = self.data,
+                   mime = 'text/csv')
+        
+        
+# 1. Adding the logo of the application
+logo = Image.open('logo.png')
+
+# In order to center the logo, the following process will be applied:
+container = st.beta_container()
+
+with container:
+    col1, col2, col3 = st.beta_columns(3)
+    col2.image(logo, width=250)
+    col1.empty()
+    col3.empty()
+
+# CSS is needed in this case, otherwise the logo will be centered but will also appear really big
+# This solution allows us to preserve the original ratio of the image while also centering it
+container.markdown(
+    f"""
+    <style>
+    .element-container:nth-child(3) {{
+        display: flex;
+        justify-content: center;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# 2. Adding the title of the app
+st.markdown(f"<h1 style = 'color:#307be8;'>Partner search app</h1>", unsafe_allow_html = True)
+        
+
+confidentiality_agreement = st.checkbox("I understand that the session is confidential & I am not to share data with unauthorized people")
+
+# The content will not be visible to the user unless they agree with the confidentiality agreement
+if confidentiality_agreement:
+    
+    # 3. Selecting the country acronym
     conn = sqlite3.connect('ecsel_database.db')
-    query_countries = "SELECT DISTINCT country FROM Participants;"
-    df_countries = pd.read_sql(query_countries, conn)
-    return df_countries
 
-def get_participants(country_acronym):
+    # Will be used to generate a dictionary
+    countries = pd.read_sql(f"SELECT * FROM countries", conn)
+
+    # Will be used to display the unique activity types to the user
+    participants = pd.read_sql(f"SELECT * FROM participants", conn)
+
+    conn.close()
+
+
+    # Filters will appear in an expander so that it does not occupy too much space on the screen
+    with st.beta_expander("Filters"):
+        # The dictionary mentioned above
+        countries_dictionary = countries.set_index('Country')['Acronym'].to_dict()
+        # The acronyms will be shown alphabetically to the user in a drop-down menu
+        country = st.selectbox('Choose a country', sorted(countries_dictionary.keys()))
+
+        # The activities
+        activity_type_column = participants["activityType"]
+        # The unique activities
+        activity_type = st.radio('Choose an activity type', activity_type_column.unique())
+
+
+    # 4. Show the user the country and activity that have been selected
+    st.write(f'You have chosen {country} and {activity_type}')
+
+
+    # 5. Show the total amount of grants received per partner in the selected country in descending order
     conn = sqlite3.connect('ecsel_database.db')
-    query = f"""SELECT shortName, name, activityType, organizationURL, SUM(ecContribution) as totalGrants
-                FROM Participants WHERE country='{country_acronym}'
-                GROUP BY organisationID
-                ORDER BY totalGrants DESC;"""
-    df_participants = pd.read_sql(query, conn)
-    return df_participants
+    # Duda: El count era totalpartners?
+    # Hay que hacer where role = participants? o solo abajo role = coordinator? No me queda muy claro en el enunciado del trabajo
 
-def get_coordinators(country_acronym):
+    df_participants = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.organizationURL, SUM(p.ecContribution) AS ReceivedGrants, COUNT(p.name) AS TotalParticipations
+                                        FROM participants AS p
+                                        JOIN countries AS c
+                                        ON c.Acronym = p.country
+                                        WHERE c.Country = '{country}' AND p.activityType = '{activity_type}'
+                                        GROUP BY p.shortName, p.name, p.activityType, p.organizationURL
+                                        ORDER BY ReceivedGrants DESC""", conn)
+
+    conn.close()
+
+    # Display it:
+    st.subheader(f'Participants in {country}')
+    # Style the dataframe beforehand
+    df_participants_stylized = df_participants.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
+    st.dataframe(df_participants_stylized)
+
+    csv_df_participants = to_csv(df_participants)
+
+    first_button = Button(data = csv_df_participants, file_name = f'participants_from')
+    first_button.display_button()
+
+
+
+    # 6. The system shall connect to the database and generate a new project dataframe with the project
+    #coordinators from the selected country (from the organizations table in the database). This
+    #dataset should filter only project coordinators and include the following fields: shortName, name,
+    #activityType, projectAcronym? -- El nombre de la file no coincide con ninguna tabla de la database, y el nombre de las columnas son iguales que antes?
+
+    # Hay que hacer where role = coordinator, entiendo -- pero el nombre de la tabla no es como dice en el enunciado del trabajo hmm
     conn = sqlite3.connect('ecsel_database.db')
-    query = f"""SELECT shortName, name, activityType, projectAcronym
-                FROM Participants WHERE country='{country_acronym}' AND role='Coordinator'
-                ORDER BY shortName ASC;"""
-    df_coordinators = pd.read_sql(query, conn)
-    return df_coordinators
+    # Duda: El count era totalpartners?
+    df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.projectAcronym
+                                                    FROM participants AS p
+                                                    JOIN countries AS c
+                                                    ON c.Acronym = p.country
+                                                    WHERE c.Country = '{country}' AND p.role = 'coordinator' AND p.activityType = '{activity_type}'
+                                                    ORDER BY p.shortName ASC""", conn)
+    conn.close()
 
-def get_grants_evolution(country_acronym):
-    conn = sqlite3.connect('ecsel_database.db')
-    query = f"""SELECT activityType, SUM(ecContribution) as totalGrants
-                FROM Participants WHERE country='{country_acronym}'
-                GROUP BY activityType;"""
-    df_grants_evolution = pd.read_sql(query, conn)
-    return df_grants_evolution
+    # Display it:
+    st.subheader(f'Coordinators in {country}')
+    # Style the dataframe beforehand
+    df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
+    st.dataframe(df_participants_coordinators_stylized)
 
-st.title('Ecsel Project Management System')
+    csv_df_participants_coordinators = to_csv(df_participants_coordinators)
 
-# Layout and color enhancements using columns and Streamlit methods
-col1, col2 = st.columns(2)
+    second_button = Button(data = csv_df_participants_coordinators, file_name = f'coordinators_from')
+    second_button.display_button()
+    
+    
+    # The side bar after all data is extracted
+    with st.sidebar:
+        st.write("Participants related graphs")
+        
+        if len(df_participants) > 0:
+            corr_coef = np.corrcoef(df_participants["ReceivedGrants"], df_participants["TotalParticipations"])[0][1]
+            st.write(f"Correlation coefficient: {corr_coef:.2f}")
 
-with col1:
-    # Load countries with enhanced dropdown
-    df_countries = load_data()
-    country = st.selectbox('Select a country', df_countries['country'], key='countrySelect', help='Select a country to display data for.')
-
-country_acronym = country_acronyms.get(country)
-
-if country_acronym:
-    with col2:
-        st.markdown("<p class='big-font'>Data Overview</p>", unsafe_allow_html=True)
-        # Display Participants Data
-        df_participants = get_participants(country_acronym)
-        st.write('Participants Data:', df_participants.style.set_properties(**{'background-color': '#f0f0f0', 'color': '#3466f6'}))
-
-    # Display Coordinators Data
-    df_coordinators = get_coordinators(country_acronym)
-    st.markdown("<p class='big-font'>Coordinator Overview</p>", unsafe_allow_html=True)
-    st.write('Coordinators Data:', df_coordinators)
-
-    # Graph of evolution of grants
-    df_grants_evolution = get_grants_evolution(country_acronym)
-    fig, ax = plt.subplots()
-    ax.bar(df_grants_evolution['activityType'], df_grants_evolution['totalGrants'], color='blue')
-    ax.set_title('Evolution of Received Grants by Activity Type')
-    ax.set_xlabel('Activity Type')
-    ax.set_ylabel('Total Grants')
-    st.pyplot(fig)
-
-    # Export buttons
-if st.button('Download Participants Data'):
-        df_participants.to_csv('participants_data.csv')
-        st.success('Participants data downloaded successfully!')
-
-if st.button('Download Coordinators Data'):
-        df_coordinators.to_csv('coordinators_data.csv')
-        st.success('Coordinators data downloaded successfully!')
+            # Generate a scatterplot between the ReceivedGrants and TotalParticipations of Participants (NOT LOG SCALE)
+            fig, ax = plt.subplots()
+            ax.scatter(df_participants["ReceivedGrants"], df_participants["TotalParticipations"])
+            ax.set_xlabel("Received Grants")
+            ax.set_ylabel("Total Participations")
+            ax.set_title("Received Grants vs. Total Participations")
+            #Display the graph
+            st.pyplot(fig)
+            
+            # Generate a violin boxplot to see the underlying distribution of the data as well
+            
+            fig2, ax2 = plt.subplots()
+            sns.violinplot(data = df_participants, x = 'ReceivedGrants')
+            ax2.set_xlim(0, None)
+            ax2.set_title("Violinplot for Received Grants")
+            st.pyplot(fig2)
+            
+            fig3, ax3 = plt.subplots()
+            sns.violinplot(data = df_participants, x = 'TotalParticipations', color = 'red')
+            ax3.set_xlim(0, None)
+            ax3.set_title("Violinplot for Total Participations")
+            st.pyplot(fig3)
