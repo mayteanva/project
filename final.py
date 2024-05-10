@@ -89,7 +89,7 @@ sns.lineplot(data=df_projects_per_year, x='Year', y='NumberOfProjects', linewidt
 plt.xticks(rotation=45)
 plt.xlabel('Year')
 plt.ylabel('Number of Projects')
-plt.title('Number of Projects Initiated Each Year')
+plt.title('Yearly Projects Initiated in {country}', color='steelblue')
 
 # Streamlit display
 with col2:
