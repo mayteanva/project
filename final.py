@@ -104,7 +104,7 @@ conn.close()
 activity_type= activity["activityType"]
 
 # Creation of selection menu for activity type
-selected_activity_type = st.select_slider('Choose an activity type', activity_type.unique(),options=(activity_type))
+selected_activity_type = st.radio('Choose an activity type', activity_type.unique())
 
 
 conn = sqlite3.connect('ecsel_database.db')
