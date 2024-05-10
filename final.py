@@ -36,14 +36,6 @@ class Button:
   # 1. Adding the logo of the application
 logo = Image.open('logo.png')
 
-# In order to center the logo, the following process will be applied:
-container = st.container()
-
-with container:
-    col1, col2, col3 = st.columns(3)
-    col2.image(logo, width=500)
-    col1.empty()
-    col3.empty()
 
   # 2. Adding the title of the app
 st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
