@@ -61,7 +61,7 @@ with container:
     col3.empty()
 
   # 2. Adding the title of the app
-st.markdown(f"<h1 style = 'color:#2395d;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
+st.markdown(f"<h1 style = 'color:lightsteelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
 
 
 # Country acronyms dictionary
