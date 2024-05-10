@@ -98,7 +98,7 @@ st.write(f'You have chosen {country}')
     first_button = Button(data = csv_df_participants, file_name = f'participants_from')
     first_button.display_button()
 
- conn = sqlite3.connect('ecsel_database.db')
+conn = sqlite3.connect('ecsel_database.db')
     # Duda: El count era totalpartners?
     df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.projectAcronym
                                                     FROM participants AS p
