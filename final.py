@@ -70,7 +70,7 @@ conn.close()
 
 # Dataframe of projects per year
 # Containing the total number of projects in a year per selected country in ascending order of years
-
+conn = sqlite3.connect('ecsel_database.db')
 df_projects_per_year = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, COUNT(p.projectID) AS NumberOfProjects
         FROM Projects p
