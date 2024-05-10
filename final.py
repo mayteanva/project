@@ -94,6 +94,7 @@ with col2:
     st.pyplot(plt.gcf())
 conn.close()
 
+st.markdown(f'<h2 style="color: lightsteelblue;">Evolution of Received Grants by Activity Type in {country}</h2>', unsafe_allow_html=True)
 
 conn = sqlite3.connect('ecsel_database.db')
 activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
@@ -101,7 +102,6 @@ conn.close()
 activity_type= activity["activityType"]
 selected_activity_type = st.radio('Choose an activity type', activity_type.unique())
 
-st.markdown(f'<h2 style="color: lightsteelblue;">Evolution of Received Grants by Activity Type in {country}</h2>', unsafe_allow_html=True)
 
 conn = sqlite3.connect('ecsel_database.db')
 df_grant_activity = pd.read_sql(f"""
@@ -109,7 +109,7 @@ df_grant_activity = pd.read_sql(f"""
         FROM Participants AS pt
         JOIN Projects p ON pt.projectID = p.projectID
         JOIN Countries c ON pt.country = c.Acronym
-        WHERE c.Country = '{country}' AND p.activityType = '{selected_activity_type}'
+        WHERE c.Country = '{country}' AND pt.activityType = '{selected_activity_type}'
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
