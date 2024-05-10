@@ -94,13 +94,19 @@ with col2:
     st.pyplot(plt.gcf())
 conn.close()
 
+
 conn = sqlite3.connect('ecsel_database.db')
+participants = pd.read_sql(f"SELECT * FROM participants", conn)
+activity_types= participants["activityType"]
+selected_activity_types = st.multiselect('Select activity types', activity_types, default=activity_types)
+conn.close()
+
 df_grant_activity = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, pt.activityType, SUM(pt.ecContribution) AS TotalGrants
         FROM Participants AS pt
         JOIN Projects p ON pt.projectID = p.projectID
         JOIN Countries c ON pt.country = c.Acronym
-        WHERE c.Country = '{country}'
+        WHERE c.Country = '{country}' AND p.activityType = '{selected_activity_type}'
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
@@ -124,14 +130,13 @@ col1, col2 = st.columns(2)
 
 # Creation of participants data frame 
 # Containing the total amount of received grants per partner in the selected country in descending order by received grants
+
 conn = sqlite3.connect('ecsel_database.db')
-activity_types= participants["activityType"]
-selected_activity_types = st.multiselect('Select activity types', activity_types, default=activity_types)
 df_participants = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.organizationURL, SUM(p.ecContribution) AS ReceivedGrants, COUNT(p.name) AS TotalParticipations
                                         FROM participants AS p
                                         JOIN countries AS c
                                         ON c.Acronym = p.country
-                                        WHERE c.Country = '{country}' AND p.activityType = '{selected_activity_type}'
+                                        WHERE c.Country = '{country}' 
                                         GROUP BY p.shortName, p.name, p.activityType, p.organizationURL
                                         ORDER BY ReceivedGrants DESC""", conn)
 
@@ -157,7 +162,6 @@ with col1:
 # Filtering only project coordinators
 
 conn = sqlite3.connect('ecsel_database.db')
-    # Duda: El count era totalpartners?
 df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.projectAcronym
                                                     FROM participants AS p
                                                     JOIN countries AS c
