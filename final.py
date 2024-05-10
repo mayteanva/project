@@ -16,8 +16,8 @@ class Button:
         self.file_name = file_name
 
     def display_button(self):
-        st.download_button(label = f'Download participants data from {countries[country]}',
-                   file_name = f'{self.file_name}_{countries[country]}.csv',
+        st.download_button(label = f'Download participants data from {countries_acronym[country]}',
+                   file_name = f'{self.file_name}_{countries_acronym[country]}.csv',
                    data = self.data,
                    mime = 'text/csv')
 
@@ -30,11 +30,12 @@ st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_al
 
 # Specyfing the country acronyms dictionary to be used
 conn = sqlite3.connect('ecsel_database.db')
-countries = pd.read_sql(f"""SELECT Country, Acronym FROM Countries ORDER BY Country ASC""", conn)
+countries = pd.read_sql(f"""SELECT Country, Acronym FROM Countries ORDER BY Country""", conn)
 conn.close()
 
 # Adding the menu to select the wanted country with the name to make it more user friendly
-country = st.selectbox('Choose a country', sorted(countries.keys()))
+countries_acronym = countries.set_index('Country')['Acronym'].to_dict()
+country = st.selectbox('Choose a country', sorted(countries_acronym.keys()))
 st.write(f'You have chosen {country}')
 
 # Dividing the document into two columns to change the layout
