@@ -76,7 +76,7 @@ country_acronyms = {
 country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
 st.write(f'You have chosen {country}')
 
-  conn = sqlite3.connect('ecsel_database.db')
+conn = sqlite3.connect('ecsel_database.db')
     df_participants = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.organizationURL, SUM(p.ecContribution) AS ReceivedGrants, COUNT(p.name) AS TotalParticipations
                                         FROM participants AS p
                                         JOIN countries AS c
