@@ -41,7 +41,7 @@ container = st.container()
 
 with container:
     col1, col2, col3 = st.columns(3)
-    col2.image(logo, width=250)
+    col2.image(logo, width=500)
     col1.empty()
     col3.empty()
 
@@ -61,6 +61,8 @@ country_acronyms = {
 country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
 st.write(f'You have chosen {country}')
 
+col1, col2 = st.columns(2)
+
 conn = sqlite3.connect('ecsel_database.db')
 df_yearly_contributions = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, SUM(pt.ecContribution) AS ECContribution
@@ -73,6 +75,7 @@ df_yearly_contributions = pd.read_sql(f"""
         """, conn)
 
 # Streamlit visualization
+with col1:
 st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
 plt.figure(figsize=(10, 6))
 sns.barplot(data=df_yearly_contributions, x='Year', y='ECContribution', palette='Blues')
@@ -106,6 +109,7 @@ plt.ylabel('Number of Projects')
 plt.title('Number of Projects Initiated Each Year')
 
 # Streamlit display
+with col2:
 st.markdown(f'<h2 style="color: lightsteelblue;">Yearly Projects Initiated in {country}</h2>', unsafe_allow_html=True)
 st.pyplot(plt.gcf())
 
