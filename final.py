@@ -100,13 +100,13 @@ conn = sqlite3.connect('ecsel_database.db')
 
 conn = sqlite3.connect('ecsel_database.db')
     # Duda: El count era totalpartners?
-    df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.projectAcronym
+df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.projectAcronym
                                                     FROM participants AS p
                                                     JOIN countries AS c
                                                     ON c.Acronym = p.country
                                                     WHERE c.Country = '{country}' AND p.role = 'coordinator'
                                                     ORDER BY p.shortName ASC""", conn)
-    conn.close()
+conn.close()
 
      st.subheader(f'Coordinators in {country}')
     # Style the dataframe beforehand
