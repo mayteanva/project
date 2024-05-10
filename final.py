@@ -77,9 +77,6 @@ plt.xlabel('Year')
 plt.ylabel('EC Contribution (€)')
 plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
 st.pyplot(plt.gcf())
-except Exception as e:
-    st.error(f"Failed to plot yearly contributions: {str(e)}")
-
 conn.close()
 
 
