@@ -86,7 +86,7 @@ st.pyplot(plt.gcf())
 conn.close()
 
 conn = sqlite3.connect('ecsel_database.db')
-df_yearly_contributions = pd.read_sql(f"""
+df_projects_per_year = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, COUNT(p.projectID) AS NumberOfProjects
         FROM Projects p
         JOIN Participants pt ON p.projectID = pt.projectID
