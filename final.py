@@ -99,7 +99,7 @@ conn = sqlite3.connect('ecsel_database.db')
 activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
 conn.close()
 
-activity_type = st.radio('Choose an activity type', activity_type_column.unique())
+activity_type = st.radio('Choose an activity type', activity.unique())
 
 
 
