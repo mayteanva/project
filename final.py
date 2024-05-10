@@ -17,21 +17,6 @@ import numpy as np
 import seaborn as sns
 from PIL import Image
 
-# Custom CSS to improve the look and feel
-st.markdown("""
-<style>
-.primaryFont {
-    font-size:16px;
-    font-family: 'Helvetica';
-    color: #4a4a4a;
-}
-.big-font {
-    font-size:20px !important;
-    font-weight: bold;
-    color: #3466f6;
-}
-</style>
-""", unsafe_allow_html=True)
 
 # Function to be used to download the files as csv files
 def to_csv(data_frame):
@@ -61,7 +46,7 @@ with container:
     col3.empty()
 
   # 2. Adding the title of the app
-st.markdown(f"<h1 style = 'color:lightsteelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
+st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
 
 
 # Country acronyms dictionary
