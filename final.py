@@ -56,7 +56,6 @@ df_yearly_contributions = pd.read_sql(f"""
         GROUP BY Year
         ORDER BY Year ASC
         """, conn)
-
 # Visualization of the yearly contribution graph in frst column and with stly that matches the theme of the app
 with col1:
     st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
@@ -67,7 +66,6 @@ with col1:
     plt.ylabel('EC Contribution (€)')
     plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
     st.pyplot(plt.gcf())
-
 conn.close()
 
 # Dataframe of projects per year
