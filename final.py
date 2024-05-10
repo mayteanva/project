@@ -96,17 +96,17 @@ conn.close()
 
 
 conn = sqlite3.connect('ecsel_database.db')
-participants = pd.read_sql(f"SELECT * FROM participants", conn)
-activity_types= participants["activityType"]
-selected_activity_types = st.multiselect('Select activity types', activity_types, default=activity_types)
+activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
+activity_types= st.multiselect('Select activity types', activity, default=activity_types)
 conn.close()
+
 
 df_grant_activity = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, pt.activityType, SUM(pt.ecContribution) AS TotalGrants
         FROM Participants AS pt
         JOIN Projects p ON pt.projectID = p.projectID
         JOIN Countries c ON pt.country = c.Acronym
-        WHERE c.Country = '{country}' AND p.activityType = '{selected_activity_type}'
+        WHERE c.Country = '{country}' AND p.activityType = '{activity_types}'
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
