@@ -112,30 +112,7 @@ st.pyplot(plt.gcf())
 # Close the database connection
 conn.close()
 
-conn = sqlite3.connect('ecsel_database.db')
-df_project_heatmap = pd.read_sql(f"""
-        SELECT strftime('%Y', p.startDate) AS Year, p.topics AS ProjectType, COUNT(p.projectID) AS NumberOfProjects
-        FROM Projects p
-        JOIN Participants pt ON p.projectID = pt.projectID
-        JOIN Countries c ON pt.country = c.Acronym
-        WHERE c.Country = '{country}'
-        GROUP BY Year, ProjectType
-        ORDER BY Year, ProjectType
-        """, conn)
-df_project_heatmap['NumberOfProjects'] = df_project_heatmap['NumberOfProjects'].astype(int)
-heatmap_data = df_project_heatmap.pivot(index="ProjectType", columns="Year", values="NumberOfProjects")
 
-# Creating the heatmap
-plt.figure(figsize=(12, 8))
-sns.heatmap(heatmap_data, annot=True, fmt="d", cmap="YlGnBu", linewidths=.5)
-plt.title(f'Project Participation Heatmap for {country}')
-
-# Streamlit display
-st.markdown(f'<h2 style="color: lightsteelblue;">Project Participation Heatmap for {country}</h2>', unsafe_allow_html=True)
-st.pyplot(plt.gcf())
-
-# Close the database connection
-conn.close()
 
  # Display itin 2 colums:
 col1, col2 = st.columns(2)
