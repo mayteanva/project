@@ -16,8 +16,8 @@ class Button:
         self.file_name = file_name
 
     def display_button(self):
-        st.download_button(label = f'Download participants data from {country_acronyms[country]}',
-                   file_name = f'{self.file_name}_{country_acronyms[country]}.csv',
+        st.download_button(label = f'Download participants data from {countries[country]}',
+                   file_name = f'{self.file_name}_{countries[country]}.csv',
                    data = self.data,
                    mime = 'text/csv')
 
