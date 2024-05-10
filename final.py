@@ -96,12 +96,12 @@ conn.close()
 
 conn = sqlite3.connect('ecsel_database.db')
 df_grant_activity = pd.read_sql(f"""
-        SELECT strftime('%Y', Projects.startDate) AS Year, Participants.activityType, SUM(Participants.ecContribution) AS TotalGrants
-        FROM Participants
-        JOIN Projects ON Participants.projectID = Projects.projectID
-        JOIN Countries ON Participants.country = Countries.Acronym
+        SELECT strftime('%Y', p.startDate) AS Year, pt.activityType, SUM(pt.ecContribution) AS TotalGrants
+        FROM Participants AS pt
+        JOIN Projects p ON pt.projectID = p.projectID
+        JOIN Countries c ON pt.country = c.Acronym
         WHERE c.Country = '{country}'
-        GROUP BY Year, Participants.activityType
+        GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
 
