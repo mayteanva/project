@@ -69,14 +69,14 @@ df_yearly_contributions = pd.read_sql(f"""
         GROUP BY Year
         ORDER BY Year ASC
         """, conn)
-    st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
-    plt.figure(figsize=(10, 6))
-    sns.barplot(data=df_yearly_contributions, x='Year', y='ECContribution', palette='coolwarm')
-    plt.xticks(rotation=45)
-    plt.xlabel('Year')
-    plt.ylabel('EC Contribution (€)')
-    plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
-    st.pyplot(plt.gcf())
+st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
+plt.figure(figsize=(10, 6))
+sns.barplot(data=df_yearly_contributions, x='Year', y='ECContribution', palette='coolwarm')
+plt.xticks(rotation=45)
+plt.xlabel('Year')
+plt.ylabel('EC Contribution (€)')
+plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
+st.pyplot(plt.gcf())
 except Exception as e:
     st.error(f"Failed to plot yearly contributions: {str(e)}")
 
