@@ -108,7 +108,7 @@ df_grant_activity = pd.read_sql(f"""
         FROM Participants AS pt
         JOIN Projects p ON pt.projectID = p.projectID
         JOIN Countries c ON pt.country = c.Acronym
-        WHERE c.Country = '{country}' AND p.activityType = '{selected_activity_types}'
+        WHERE c.Country = '{country}' AND p.activityType IN '{selected_activity_types}'
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
