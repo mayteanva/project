@@ -70,6 +70,7 @@ conn.close()
 
 # Dataframe of projects per year
 # Containing the total number of projects in a year per selected country in ascending order of years
+
 df_projects_per_year = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, COUNT(p.projectID) AS NumberOfProjects
         FROM Projects p
@@ -92,7 +93,6 @@ plt.title('Yearly Projects Initiated in {country}', color='steelblue')
 with col2:
     st.markdown(f'<h2 style="color: lightsteelblue;">Yearly Projects Initiated in {country}</h2>', unsafe_allow_html=True)
     st.pyplot(plt.gcf())
-
 conn.close()
 
 # Continuing the theme of the two columns the df will also be shown this way 
