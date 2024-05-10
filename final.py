@@ -106,7 +106,7 @@ plt.ylabel('Number of Projects')
 plt.title('Number of Projects Initiated Each Year')
 
 # Streamlit display
-st.markdown('<h2 style="color: lightsteelblue;">Number of Projects Initiated Each Year</h2>', unsafe_allow_html=True)
+st.markdown(f'<h2 style="color: lightsteelblue;">Yearly Projects Initiated in {country}</h2>', unsafe_allow_html=True)
 st.pyplot(plt.gcf())
 
 # Close the database connection
