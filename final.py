@@ -21,7 +21,7 @@ class Button:
                    data = self.data,
                    mime = 'text/csv')
 
-# Starting the app with the project logo, making it wither to see it better
+# Starting the app with the project logo, making it wider to see it better
 logo = Image.open('logo.png')
 st.image(logo, use_column_width=False, width=500)
 
@@ -94,13 +94,17 @@ with col2:
     st.pyplot(plt.gcf())
 conn.close()
 
+# Section for evolution of received grants of the partners in a coutry according to their activityType
 st.markdown(f'<h2 style="color: lightsteelblue;">Evolution of Received Grants by Activity Type in {country}</h2>', unsafe_allow_html=True)
 
+# Creation of dataframe to chose activity
 conn = sqlite3.connect('ecsel_database.db')
 activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
 conn.close()
 activity_type= activity["activityType"]
-selected_activity_type = st.radio('Choose an activity type', activity_type.unique())
+
+# Creation of selection menu for activity type
+selected_activity_type = st.select_slider('Choose an activity type', activity_type.unique())
 
 
 conn = sqlite3.connect('ecsel_database.db')
