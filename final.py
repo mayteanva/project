@@ -35,6 +35,7 @@ class Button:
 
   # 1. Adding the logo of the application
 logo = Image.open('logo.png')
+logo.show()
 
 
   # 2. Adding the title of the app
