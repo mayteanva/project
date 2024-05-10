@@ -122,7 +122,8 @@ df_project_heatmap = pd.read_sql(f"""
         GROUP BY Year, ProjectType
         ORDER BY Year, ProjectType
         """, conn)
-heatmap_data = df_project_heatmap.pivot("ProjectType", "Year", "NumberOfProjects")
+heatmap_data = df_project_heatmap.pivot(index="ProjectType", columns="Year", values="NumberOfProjects")
+
 # Creating the heatmap
 plt.figure(figsize=(12, 8))
 sns.heatmap(heatmap_data, annot=True, fmt="d", cmap="YlGnBu", linewidths=.5)
