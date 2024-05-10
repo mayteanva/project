@@ -79,8 +79,8 @@ conn.close()
    # Display it:
     # Style the dataframe beforehand
 with col1:
-    st.subheader(f'Participants in {country}')
-    df_participants_stylized = df_participants.style.set_properties(**{'background-color': 'black', 'color': 'lightsteelblue'})
+    st.subheader(f'Participants in {country}','color': 'lightsteelblue')
+    df_participants_stylized = df_participants.style.set_properties(**{'background-color': 'black', 'color': 'steelblue'})
     st.dataframe(df_participants_stylized)
 
 csv_df_participants = to_csv(df_participants)
@@ -100,8 +100,8 @@ df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.act
 conn.close()
 
 with col2:
-    st.subheader(f'Coordinators in {country}')
-    df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': 'black', 'color': 'lightsteelblue'})
+    st.subheader(f'Coordinators in {country}','color': 'lightsteelblue')
+    df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': 'black', 'color': 'steelblue'})
     st.dataframe(df_participants_coordinators_stylized)
 
 
