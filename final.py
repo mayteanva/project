@@ -125,11 +125,13 @@ col1, col2 = st.columns(2)
 # Creation of participants data frame 
 # Containing the total amount of received grants per partner in the selected country in descending order by received grants
 conn = sqlite3.connect('ecsel_database.db')
+activity_types= participants["activityType"]
+selected_activity_types = st.multiselect('Select activity types', activity_types, default=activity_types)
 df_participants = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.organizationURL, SUM(p.ecContribution) AS ReceivedGrants, COUNT(p.name) AS TotalParticipations
                                         FROM participants AS p
                                         JOIN countries AS c
                                         ON c.Acronym = p.country
-                                        WHERE c.Country = '{country}'
+                                        WHERE c.Country = '{country}' AND p.activityType = '{selected_activity_type}'
                                         GROUP BY p.shortName, p.name, p.activityType, p.organizationURL
                                         ORDER BY ReceivedGrants DESC""", conn)
 
