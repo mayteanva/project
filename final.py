@@ -29,12 +29,12 @@ st.image(logo, use_column_width=False, width=500)
 st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
 
 # Specyfing the country acronyms dictionary to be used
+conn = sqlite3.connect('ecsel_database.db')
+countries = pd.read_sql(f"SELECT * FROM countries", conn)
+conn.close()
 
-with sqlite3.connect('ecsel_database.db') as conn:
-    country_acronyms = pd.read_sql("SELECT Country, Acronym FROM Countries ORDER BY Country ASC", conn)
-    
 # Adding the menu to select the wanted country with the name to make it more user friendly
-country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
+country = st.selectbox('Choose a country', sorted(countries.keys()))
 st.write(f'You have chosen {country}')
 
 # Dividing the document into two columns to change the layout
