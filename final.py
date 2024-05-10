@@ -79,7 +79,7 @@ conn.close()
    # Display it:
     # Style the dataframe beforehand
 with col1:
-    st.subheader(f'Participants in {country})
+    st.subheader(f'Participants in {country}')
     df_participants_stylized = df_participants.style.set_properties(**{'background-color': '#f2f9ff', 'color': 'steelblue'})
     st.dataframe(df_participants_stylized)
 
