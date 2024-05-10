@@ -30,7 +30,7 @@ st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_al
 
 # Specyfing the country acronyms dictionary to be used
 conn = sqlite3.connect('ecsel_database.db')
-countries = pd.read_sql(f"SELECT * FROM countries", conn)
+countries = pd.read_sql(f""SELECT Country, Acronym FROM Countries ORDER BY Country ASC"", conn)
 conn.close()
 
 # Adding the menu to select the wanted country with the name to make it more user friendly
