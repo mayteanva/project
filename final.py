@@ -106,7 +106,7 @@ df_grant_activity = pd.read_sql(f"""
         """, conn)
 
 plt.figure(figsize=(10, 6))
-sns.lineplot(data=df_grants, x='Year', y='TotalGrants', hue='activityType', marker='o')
+sns.lineplot(data=df_grant_activity, x='Year', y='TotalGrants', hue='activityType', marker='o')
 plt.title(f'Evolution of Received Grants by Activity Type in {country}', color='steelblue')
 plt.xlabel('Year')
 plt.ylabel('Total Grants Received (€)')
