@@ -85,6 +85,34 @@ st.pyplot(plt.gcf())
 # Close the database connection
 conn.close()
 
+conn = sqlite3.connect('ecsel_database.db')
+df_yearly_contributions = pd.read_sql(f"""
+        SELECT strftime('%Y', p.startDate) AS Year, COUNT(p.projectID) AS NumberOfProjects
+        FROM Projects p
+        JOIN Participants pt ON p.projectID = pt.projectID
+        JOIN Countries c ON pt.country = c.Acronym
+        WHERE c.Country = '{country}'
+        GROUP BY Year
+        ORDER BY Year ASC
+        """, conn)
+
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=df_projects_per_year, x='Year', y='NumberOfProjects', linewidth=2.5, marker='o')
+
+# Labeling and title
+plt.xticks(rotation=45)
+plt.xlabel('Year')
+plt.ylabel('Number of Projects')
+plt.title('Number of Projects Initiated Each Year')
+
+# Streamlit display
+st.markdown('<h2 style="color: lightsteelblue;">Number of Projects Initiated Each Year</h2>', unsafe_allow_html=True)
+st.pyplot(plt.gcf())
+
+# Close the database connection
+conn.close()
+
+
  # Display itin 2 colums:
 col1, col2 = st.columns(2)
 
