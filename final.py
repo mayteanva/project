@@ -73,7 +73,7 @@ country_acronyms = {
     'Portugal': 'PT', 'Romania': 'RO', 'Slovenia': 'SI', 'Slovakia': 'SK', 'Finland': 'FI', 'Sweden': 'SE'
 }
 
- country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
+country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
  st.write(f'You have chosen {country}')
 
   conn = sqlite3.connect('ecsel_database.db')
