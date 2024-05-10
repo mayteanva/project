@@ -94,6 +94,28 @@ with col2:
     st.pyplot(plt.gcf())
 conn.close()
 
+conn = sqlite3.connect('ecsel_database.db')
+df_grant_activity = pd.read_sql(f"""
+        SELECT strftime('%Y', Projects.startDate) AS Year, Participants.activityType, SUM(Participants.ecContribution) AS TotalGrants
+        FROM Participants
+        JOIN Projects ON Participants.projectID = Projects.projectID
+        JOIN Countries ON Participants.country = Countries.Acronym
+        WHERE c.Country = '{country}'
+        GROUP BY Year, Participants.activityType
+        ORDER BY Year ASC
+        """, conn)
+
+plt.figure(figsize=(10, 6))
+    sns.lineplot(data=df_grants, x='Year', y='TotalGrants', hue='activityType', marker='o')
+    plt.title(f'Evolution of Received Grants by Activity Type in {country}', color='steelblue')
+    plt.xlabel('Year')
+    plt.ylabel('Total Grants Received (€)')
+    plt.xticks(rotation=45)
+    plt.legend(title='Activity Type')
+st.markdown(f'<h2 style="color: lightsteelblue;">Grants per Activity in {country}</h2>', unsafe_allow_html=True)    
+st.pyplot(plt.gcf())
+
+conn.close()
 # Continuing the theme of the two columns the df will also be shown this way 
 col1, col2 = st.columns(2)
 
