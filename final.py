@@ -76,14 +76,14 @@ df_yearly_contributions = pd.read_sql(f"""
 
 # Streamlit visualization
 with col1:
-st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
-plt.figure(figsize=(10, 6))
-sns.barplot(data=df_yearly_contributions, x='Year', y='ECContribution', palette='Blues')
-plt.xticks(rotation=45)
-plt.xlabel('Year')
-plt.ylabel('EC Contribution (€)')
-plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
-st.pyplot(plt.gcf())
+    st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
+    plt.figure(figsize=(10, 6))
+    sns.barplot(data=df_yearly_contributions, x='Year', y='ECContribution', palette='Blues')
+    plt.xticks(rotation=45)
+    plt.xlabel('Year')
+    plt.ylabel('EC Contribution (€)')
+    plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
+    st.pyplot(plt.gcf())
 
 # Close the database connection
 conn.close()
@@ -110,8 +110,8 @@ plt.title('Number of Projects Initiated Each Year')
 
 # Streamlit display
 with col2:
-st.markdown(f'<h2 style="color: lightsteelblue;">Yearly Projects Initiated in {country}</h2>', unsafe_allow_html=True)
-st.pyplot(plt.gcf())
+    st.markdown(f'<h2 style="color: lightsteelblue;">Yearly Projects Initiated in {country}</h2>', unsafe_allow_html=True)
+    st.pyplot(plt.gcf())
 
 # Close the database connection
 conn.close()
