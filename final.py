@@ -104,7 +104,7 @@ conn.close()
 activity_type= activity["activityType"]
 
 # Creation of selection menu for activity type
-selected_activity_type = st.toggle('Choose an activity type', activity_type.unique())
+selected_activity_type = st.checkbox('Choose an activity type', activity_type.unique())
 
 
 conn = sqlite3.connect('ecsel_database.db')
