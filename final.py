@@ -28,13 +28,15 @@ st.image(logo, use_column_width=False, width=500)
 # After the logo we put the tittle of the project in a steel blue to match the logo
 st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
 
-# Specyfing the country acronyms dictionary to be used
+# Connectin to the database and extracting the list of countries in countries dataframe
 conn = sqlite3.connect('ecsel_database.db')
 countries = pd.read_sql(f"""SELECT Country, Acronym FROM Countries ORDER BY Country""", conn)
 conn.close()
 
-# Adding the menu to select the wanted country with the name to make it more user friendly
+#Creation of the final country dictionary 
 countries_acronym = countries.set_index('Country')['Acronym'].to_dict()
+
+# Adding the menu to select the wanted country with the name to make it more user friendly
 country = st.selectbox('Choose a country', sorted(countries_acronym.keys()))
 st.write(f'You have chosen {country}')
 
