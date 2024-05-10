@@ -97,9 +97,10 @@ conn.close()
 
 conn = sqlite3.connect('ecsel_database.db')
 activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
-activity_types = sorted(activity['activityType'].unique())
 conn.close()
-selected_activity_types= st.multiselect('Select activity types', activity_types) 
+
+activity_type = st.radio('Choose an activity type', activity_type_column.unique())
+
 
 
 conn = sqlite3.connect('ecsel_database.db')
@@ -108,7 +109,7 @@ df_grant_activity = pd.read_sql(f"""
         FROM Participants AS pt
         JOIN Projects p ON pt.projectID = p.projectID
         JOIN Countries c ON pt.country = c.Acronym
-        WHERE c.Country = '{country}' AND p.activityType IN '{selected_activity_types}'
+        WHERE c.Country = '{country}' AND p.activityType I= '{activity_typw}'
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
@@ -121,7 +122,7 @@ plt.ylabel('Total Grants Received (€)')
 plt.xticks(rotation=45)
 plt.legend(title='Activity Type')
 
-st.markdown(f'<h2 style="color: lightsteelblue;">Evolution of Received Grants by Activity Type in {country}</h2>', unsafe_allow_html=True)    
+st.markdown(f'<h2 style="color: lightsteelblue;">Evolution of Received Grants by {activity_type} in {country}</h2>', unsafe_allow_html=True)    
 st.pyplot(plt.gcf())
 
 conn.close()
