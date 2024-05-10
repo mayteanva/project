@@ -97,7 +97,7 @@ conn.close()
 
 conn = sqlite3.connect('ecsel_database.db')
 activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
-activity_types= st.multiselect('Select activity types', activity, default=activity_types)
+activity_types= st.multiselect('Select activity types', activity.unique())
 conn.close()
 
 
