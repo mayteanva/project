@@ -52,10 +52,10 @@ class Button:
 logo = Image.open('logo.png')
 
 # In order to center the logo, the following process will be applied:
-container = st.beta_container()
+container = st.container()
 
 with container:
-    col1, col2, col3 = st.beta_columns(3)
+    col1, col2, col3 = st.columns(3)
     col2.image(logo, width=250)
     col1.empty()
     col3.empty()
