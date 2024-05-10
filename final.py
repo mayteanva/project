@@ -79,7 +79,7 @@ conn.close()
    # Display it:
     # Style the dataframe beforehand
 with col1:
-    st.subheader(f'Participants in {country}','color': 'lightsteelblue')
+    st.markdown(f'<h2 style = 'color:lightsteelblue;'">Coordinators in {country}</h2>', unsafe_allow_html=True)
     df_participants_stylized = df_participants.style.set_properties(**{'background-color': 'black', 'color': 'steelblue'})
     st.dataframe(df_participants_stylized)
 
@@ -100,7 +100,7 @@ df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.act
 conn.close()
 
 with col2:
-    st.markdown(f'<h2 style = 'color:lightsteelblue;">Coordinators in {country}</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2 style = 'color:lightsteelblue;'">Coordinators in {country}</h2>', unsafe_allow_html=True)
     df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': 'black', 'color': 'steelblue'})
     st.dataframe(df_participants_coordinators_stylized)
 
