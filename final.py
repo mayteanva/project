@@ -3,7 +3,6 @@ import streamlit as st
 import pandas as pd
 import sqlite3
 import matplotlib.pyplot as plt
-import numpy as np
 import seaborn as sns
 from PIL import Image
 
