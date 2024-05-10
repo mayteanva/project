@@ -66,7 +66,7 @@ df_yearly_contributions = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, SUM(pt.ecContribution) AS ECContribution
         FROM Projects p
         JOIN Participants pt ON p.projectID = pt.projectID
-        OIN Countries c ON pt.country = c.Acronym
+        JOIN Countries c ON pt.country = c.Acronym
         WHERE c.Country = '{country}'
         GROUP BY Year
         ORDER BY Year ASC
