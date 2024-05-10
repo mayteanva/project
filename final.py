@@ -80,7 +80,7 @@ conn.close()
     # Style the dataframe beforehand
 with col1:
     st.subheader(f'Participants in {country}')
-    df_participants_stylized = df_participants.style.set_properties(**{'background-color': '#f2f9ff', 'color': 'steelblue'})
+    df_participants_stylized = df_participants.style.set_properties(**{'background-color': 'black', 'color': 'lightsteelblue'})
     st.dataframe(df_participants_stylized)
 
 csv_df_participants = to_csv(df_participants)
@@ -101,7 +101,7 @@ conn.close()
 
 with col2:
     st.subheader(f'Coordinators in {country}')
-    df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
+    df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': 'black', 'color': 'lightsteelblue'})
     st.dataframe(df_participants_coordinators_stylized)
 
 
