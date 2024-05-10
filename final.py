@@ -35,7 +35,7 @@ class Button:
 
   # 1. Adding the logo of the application
 logo = Image.open('logo.png')
-st.logo(use_column_width=False, width=500)
+st.image(logo, use_column_width=False, width=500)
 
 
   # 2. Adding the title of the app
