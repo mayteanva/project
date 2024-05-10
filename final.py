@@ -62,13 +62,17 @@ country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
 st.write(f'You have chosen {country}')
 
 conn = sqlite3.connect('ecsel_database.db')
-df_yearly_contributions = pd.read_sql(f"""SELECT p.startDate, SUM(p.ecContribution) AS ECContribution
-        FROM participants AS p
-        JOIN countries AS c
-        ON c.Acronym = p.country
+df_yearly_contributions = pd.read_sql(f"""
+        SELECT strftime('%Y', p.startDate) AS Year, SUM(pt.ecContribution) AS ECContribution
+        FROM Projects p
+        JOIN Participants pt ON p.projectID = pt.projectID
+        OIN Countries c ON pt.country = c.Acronym
         WHERE c.Country = '{country}'
-        ORDER BY p.startDate ASC
+        GROUP BY Year
+        ORDER BY Year ASC
         """, conn)
+
+# Streamlit visualization
 st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
 plt.figure(figsize=(10, 6))
 sns.barplot(data=df_yearly_contributions, x='Year', y='ECContribution', palette='coolwarm')
@@ -77,8 +81,9 @@ plt.xlabel('Year')
 plt.ylabel('EC Contribution (€)')
 plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
 st.pyplot(plt.gcf())
-conn.close()
 
+# Close the database connection
+conn.close()
 
  # Display itin 2 colums:
 col1, col2 = st.columns(2)
