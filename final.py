@@ -85,18 +85,18 @@ df_participants = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.
                                         GROUP BY p.shortName, p.name, p.activityType, p.organizationURL
                                         ORDER BY ReceivedGrants DESC""", conn)
 
-    conn.close()
+conn.close()
 
    # Display it:
-    st.subheader(f'Participants in {country}')
+st.subheader(f'Participants in {country}')
     # Style the dataframe beforehand
-    df_participants_stylized = df_participants.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
-    st.dataframe(df_participants_stylized)
+df_participants_stylized = df_participants.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
+st.dataframe(df_participants_stylized)
 
-    csv_df_participants = to_csv(df_participants)
+csv_df_participants = to_csv(df_participants)
 
-    first_button = Button(data = csv_df_participants, file_name = f'participants_from')
-    first_button.display_button()
+first_button = Button(data = csv_df_participants, file_name = f'participants_from')
+first_button.display_button()
 
 conn = sqlite3.connect('ecsel_database.db')
     # Duda: El count era totalpartners?
@@ -108,12 +108,12 @@ df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.act
                                                     ORDER BY p.shortName ASC""", conn)
 conn.close()
 
-     st.subheader(f'Coordinators in {country}')
+st.subheader(f'Coordinators in {country}')
     # Style the dataframe beforehand
-    df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
-    st.dataframe(df_participants_coordinators_stylized)
+df_participants_coordinators_stylized = df_participants_coordinators.style.set_properties(**{'background-color': '#f2f9ff', 'color': '#000000'})
+st.dataframe(df_participants_coordinators_stylized)
 
-    csv_df_participants_coordinators = to_csv(df_participants_coordinators)
+csv_df_participants_coordinators = to_csv(df_participants_coordinators)
 
-    second_button = Button(data = csv_df_participants_coordinators, file_name = f'coordinators_from')
-    second_button.display_button()
+second_button = Button(data = csv_df_participants_coordinators, file_name = f'coordinators_from')
+second_button.display_button()
