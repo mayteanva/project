@@ -62,8 +62,7 @@ country = st.selectbox('Choose a country', sorted(country_acronyms.keys()))
 st.write(f'You have chosen {country}')
 
 conn = sqlite3.connect('ecsel_database.db')
-df_yearly_contributions = pd.read_sql(f"""
-        SELECT strftime('%Y', startDate) AS Year, SUM(ecContribution) AS ECContribution
+df_yearly_contributions = pd.read_sql(f"""SELECT strftime('%Y', startDate) AS Year, SUM(ecContribution) AS ECContribution
         FROM participants AS p
         JOIN countries AS c
         ON c.Acronym = p.country
