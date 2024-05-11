@@ -29,9 +29,9 @@ st.image(logo, use_column_width=False, width=500)
 st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
 
 # Connectin to the database and extracting the list of countries in countries dataframe
-conn = sqlite3.connect('ecsel_database.db')
-countries = pd.read_sql(f"""SELECT Country, Acronym FROM Countries ORDER BY Country""", conn)
-conn.close()
+connenction = sqlite3.connect('ecsel_database.db')
+countries = pd.read_sql(f"""SELECT Country, Acronym FROM Countries ORDER BY Country""", connection)
+connection.close()
 
 #Creation of the final country dictionary 
 countries_acronym = countries.set_index('Country')['Acronym'].to_dict()
@@ -45,7 +45,7 @@ col1, col2 = st.columns(2)
 
 # Dataframe of yearly contribution 
 # Containing the total EC contribution per year in the selected country in ascending order of years
-conn = sqlite3.connect('ecsel_database.db')
+connection = sqlite3.connect('ecsel_database.db')
 df_yearly_contributions = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, SUM(pt.ecContribution) AS ECContribution
         FROM Projects p
@@ -54,7 +54,7 @@ df_yearly_contributions = pd.read_sql(f"""
         WHERE c.Country = '{country}'
         GROUP BY Year
         ORDER BY Year ASC
-        """, conn)
+        """, connection)
 # Visualization of the yearly contribution graph in frst column and with stly that matches the theme of the app
 with col1:
     st.markdown(f'<h2 style="color: lightsteelblue;">Yearly EC Contribution in {country}</h2>', unsafe_allow_html=True)
@@ -65,11 +65,11 @@ with col1:
     plt.ylabel('EC Contribution (€)')
     plt.title(f'Yearly EC Contribution in {country}', color='steelblue')
     st.pyplot(plt.gcf())
-conn.close()
+connection.close()
 
 # Dataframe of projects per year
 # Containing the total number of projects in a year per selected country in ascending order of years
-conn = sqlite3.connect('ecsel_database.db')
+connection = sqlite3.connect('ecsel_database.db')
 df_projects_per_year = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, COUNT(p.projectID) AS NumberOfProjects
         FROM Projects p
@@ -78,7 +78,7 @@ df_projects_per_year = pd.read_sql(f"""
         WHERE c.Country = '{country}'
         GROUP BY Year
         ORDER BY Year ASC
-        """, conn)
+        """, connection)
 # Matching the style of the projects per year graph to the theme 
 plt.figure(figsize=(10, 6))
 sns.lineplot(data=df_projects_per_year, x='Year', y='NumberOfProjects', linewidth=2.5, marker='o')
@@ -92,22 +92,22 @@ plt.title('Yearly Projects Initiated in {country}', color='steelblue')
 with col2:
     st.markdown(f'<h2 style="color: lightsteelblue;">Yearly Projects Initiated in {country}</h2>', unsafe_allow_html=True)
     st.pyplot(plt.gcf())
-conn.close()
+connection.close()
 
 # Section for evolution of received grants of the partners in a coutry according to their activityType
 st.markdown(f'<h2 style="color: lightsteelblue;">Evolution of Received Grants by Activity Type in {country}</h2>', unsafe_allow_html=True)
 
 # Creation of dataframe to chose activity
-conn = sqlite3.connect('ecsel_database.db')
-activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", conn)
-conn.close()
+connection = sqlite3.connect('ecsel_database.db')
+activity = pd.read_sql(f"""SELECT activityType FROM Participants ORDER BY activityType""", connection)
+connection.close()
 activity_type= activity["activityType"]
 
 # Creation of selection menu for activity type
 selected_activity_type = st.radio('Choose an activity type', activity_type.unique())
 
 # Creation of dataframe of the received grant per country and according to the activity type slected
-conn = sqlite3.connect('ecsel_database.db')
+connection = sqlite3.connect('ecsel_database.db')
 df_grant_activity = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, pt.activityType, SUM(pt.ecContribution) AS TotalGrants
         FROM Participants AS pt
@@ -116,7 +116,7 @@ df_grant_activity = pd.read_sql(f"""
         WHERE c.Country = '{country}' AND pt.activityType = '{selected_activity_type}'
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
-        """, conn)
+        """, connection)
 # visualization of the received grant per country and activity type matching the steel blue theme
 plt.figure(figsize=(10, 6))
 sns.lineplot(data=df_grant_activity, x='Year', y='TotalGrants', hue='activityType', marker='o', palette='Blues')
@@ -128,7 +128,7 @@ plt.legend(title='Activity Type')
     
 st.pyplot(plt.gcf())
 
-conn.close()
+connection.close()
 
 # Continuing the theme of the two columns the df will also be shown this way 
 col1, col2 = st.columns(2)
@@ -137,16 +137,16 @@ col1, col2 = st.columns(2)
 # Creation of participants data frame 
 # Containing the total amount of received grants per partner in the selected country in descending order by received grants
 
-conn = sqlite3.connect('ecsel_database.db')
+connection = sqlite3.connect('ecsel_database.db')
 df_participants = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.organizationURL, SUM(p.ecContribution) AS ReceivedGrants, COUNT(p.name) AS TotalParticipations
                                         FROM participants AS p
                                         JOIN countries AS c
                                         ON c.Acronym = p.country
                                         WHERE c.Country = '{country}' 
                                         GROUP BY p.shortName, p.name, p.activityType, p.organizationURL
-                                        ORDER BY ReceivedGrants DESC""", conn)
+                                        ORDER BY ReceivedGrants DESC""", connection)
 
-conn.close()
+connection.close()
 
 # Visualization of data frame in the first column
 # Matching the theme with a light steel blue title, a black backgorund and steel blue color for the data
@@ -167,14 +167,14 @@ with col1:
 # Creation of coordinators data frame 
 # Filtering only project coordinators
 
-conn = sqlite3.connect('ecsel_database.db')
+connection = sqlite3.connect('ecsel_database.db')
 df_participants_coordinators = pd.read_sql(f"""SELECT p.shortName, p.name, p.activityType, p.projectAcronym
                                                     FROM participants AS p
                                                     JOIN countries AS c
                                                     ON c.Acronym = p.country
                                                     WHERE c.Country = '{country}' AND p.role = 'coordinator'
-                                                    ORDER BY p.shortName ASC""", conn)
-conn.close()
+                                                    ORDER BY p.shortName ASC""", connection)
+connection.close()
 
 # Visualization of data frame in the second column
 # Matching the theme with a light steel blue title, a black backgorund and steel blue color for the data
