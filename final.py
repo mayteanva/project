@@ -119,7 +119,7 @@ df_grant_activity = pd.read_sql(f"""
         """, connection)
 # visualization of the received grant per country and activity type matching the steel blue theme
 plt.figure(figsize=(10, 6))
-sns.lineplot(data=df_grant_activity, x='Year', y='TotalGrants', hue='activityType', marker='o', s=100, palette='Blues')
+sns.lineplot(data=df_grant_activity, x='Year', y='TotalGrants', hue='activityType', marker='o', palette='Blues')
 plt.title(f'Evolution of Received Grants by {selected_activity_type} in {country}', color='steelblue')
 plt.xlabel('Year')
 plt.ylabel('Total Grants Received (€)')
