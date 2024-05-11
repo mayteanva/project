@@ -29,7 +29,7 @@ st.image(logo, use_column_width=False, width=500)
 st.markdown(f"<h1 style = 'color:steelblue;'>PARTNER SEARCH APP</h1>", unsafe_allow_html = True)
 
 # Connectin to the database and extracting the list of countries in countries dataframe
-connenction = sqlite3.connect('ecsel_database.db')
+connection = sqlite3.connect('ecsel_database.db')
 countries = pd.read_sql(f"""SELECT Country, Acronym FROM Countries ORDER BY Country""", connection)
 connection.close()
 
