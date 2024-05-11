@@ -158,7 +158,23 @@ with col1:
 
 csv_df_participants = to_csv(df_participants)
 
-# Adding the first button configured at the beginning of the project to download the participants dataframe as csv
+# Defining the buttons to download the data
+def to_csv(data_frame):
+    return data_frame.to_csv().encode('utf-8')
+
+class Button:
+    def __init__(self, data, file_name):
+        self.data = data
+        self.file_name = file_name
+
+    def display_button(self):
+        st.download_button(label = f'Download participants data from {countries_acronym[country]}',
+                   file_name = f'{self.file_name}_{countries_acronym[country]}.csv',
+                   data = self.data,
+                   mime = 'text/csv')
+
+
+# Adding the first button to download the participants dataframe as csv
 # In the first column as well so its under the dataframe 
 with col1:
     first_button = Button(data = csv_df_participants, file_name = f'participants_from')
@@ -187,7 +203,7 @@ with col2:
 
 csv_df_participants_coordinators = to_csv(df_participants_coordinators)
 
-# Adding the second button configured at the beginning of the project to download the coordinators dataframe as csv
+# Adding the second button to download the coordinators dataframe as csv
 # In the second column as well so its under the dataframe 
 
 with col2:
