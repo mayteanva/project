@@ -81,7 +81,7 @@ df_projects_per_year = pd.read_sql(f"""
         """, connection)
 # Matching the style of the projects per year graph to the theme 
 plt.figure(figsize=(10, 6))
-sns.scatterplot(data=df_projects_per_year, x='Year', y='NumberOfProjects', linewidth=2.5, marker='o', s=100)
+sns.scatterplot(data=df_projects_per_year, x='Year', y='NumberOfProjects', linewidth=2.5, marker='o', s=250)
 
 plt.xticks(rotation=45)
 plt.xlabel('Year')
