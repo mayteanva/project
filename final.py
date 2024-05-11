@@ -106,7 +106,7 @@ activity_type= activity["activityType"]
 # Creation of selection menu for activity type
 selected_activity_type = st.radio('Choose an activity type', activity_type.unique())
 
-
+# Creation of dataframe of the received grant per country and according to the activity type slected
 conn = sqlite3.connect('ecsel_database.db')
 df_grant_activity = pd.read_sql(f"""
         SELECT strftime('%Y', p.startDate) AS Year, pt.activityType, SUM(pt.ecContribution) AS TotalGrants
@@ -117,7 +117,7 @@ df_grant_activity = pd.read_sql(f"""
         GROUP BY Year, pt.activityType
         ORDER BY Year ASC
         """, conn)
-
+# visualization of the received grant per country and activity type matching the steel blue theme
 plt.figure(figsize=(10, 6))
 sns.lineplot(data=df_grant_activity, x='Year', y='TotalGrants', hue='activityType', marker='o', palette='Blues')
 plt.title(f'Evolution of Received Grants by {selected_activity_type} in {country}', color='steelblue')
